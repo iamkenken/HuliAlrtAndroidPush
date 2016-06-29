@@ -1,0 +1,31 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.alfafusion.snkralrt"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.alfafusion.snkralrt"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.alfafusion.snkralrt"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.alfafusion.snkralrt"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.alfafusion.snkralrt"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "306256784230",
+            "PACKAGE_NAME": "com.alfafusion.hulinga"
+        }
+    },
+    "dependent_plugins": {}
+}

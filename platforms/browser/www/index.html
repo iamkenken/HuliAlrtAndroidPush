@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    Customize this policy to fit your own app's needs. For more guidance, see:
+      https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+    Some notes:
+      * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+      * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+      * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+    -->
+  <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
+  <!-- Local -->
+  <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://hulinga.dev 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">-->
+  
+  <!-- Dev -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://dev.alfafusion.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
+
+  <!-- Required meta tags-->
+  <meta charset="utf-8">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui"> -->
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <link rel="stylesheet" href="js/font-awesome-4.5.0/css/font-awesome.min.css" />
+
+  <title>Huli Alert</title>
+
+</head>
+
+<body class="theme-gray">
+<script>document.body.style.display = "none";</script>
+
+<div class="statusbar-overlay"></div>
+
+<!-- Panels overlay-->
+<div class="panel-overlay"></div>
+<!-- Left panel with cover effect-->
+<div id="sidepanel" class="panel panel-left panel-reveal">
+<!--<div class="content-block">-->
+<!-- <div class="content-block-title"></div> -->
+<div class="sidenav list-block">
+  <ul>
+    <li class="listbrowse">
+      <a href="#" id="a-home" class="browse-link item-content list-panel-all close-panel item-link">
+        <div class="item-inner">
+          <div id="menu-browse" class="item-title">Huli Alert</div>
+        </div>
+      </a>
+    </li>
+    <li class="listsettings">
+      <a href="#" class="plate-link item-content list-panel-all close-panel item-link showplate">
+        <div class="item-inner">
+          <div class="item-title">Plate Number</div>
+        </div>
+      </a>
+    </li>
+    <li class="listprofile">
+      <a href="#" id="a-profile" class="profile-link item-content list-panel-all close-panel item-link">
+        <div class="item-inner">
+          <div id="menu-profile" class="item-title">My Account</div>
+        </div>
+      </a>
+    </li>
+    <li class="listlogout">
+      <a href="#" id="logout" class="logout-link item-content list-panel-all close-panel item-link">
+        <div class="item-inner">
+          <div class="item-title">Logout</div>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>
+</div>
+
+<!-- Views -->
+<div class="views">
+<!-- Your main view, should have "view-main" class-->
+<div class="view view-main">
+<!-- Top Navbar-->
+<div class="navbar">
+    <!-- Home Navbar -->
+    <div class="navbar-inner" data-paged="index">
+    <div class="left sliding">
+      <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+    </div>
+    <div class="center color-white">Huli Alert</div>
+    </div>
+</div>
+<!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+<div class="pages navbar-through toolbar-through">
+    <!-- Home Page-->
+    <div class="page" data-page="index">
+    <!-- Scrollable page content-->
+    <div class="page-content">
+      <div class="content-block">
+        <div class="row">
+        <div class="col-100 text-center">
+        <img src="img/logo-bg.png" style="width: 220px; margin: 0 auto;" />
+        </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+<!-- Bottom Toolbar-->
+<div class="toolbar">
+  <div class="toolbar-inner"><a href="#" class="link" id="addplate"><i class="fa fa-plus"></i></a><a href="#" class="link" id="searchplate"><i class="fa fa-search"></i></a><a href="#" class="link showplate"><i class="fa fa-hashtag"></i></a></div>
+</div>
+</div>
+</div>
+
+<script type="text/template7" id="signupTemplate">
+
+    <div class="page" data-page="signupTemplate">
+        <div class="page-content">
+          <div class="content-block" style="margin-top: 20px!important">
+            <div class="row">
+            <div class="col-100">
+            
+            <div class="text-center">
+            <img src="img/logo-bg.png" style="width: 220px; margin: 0 auto;" />
+            </div>
+              <form id="signupForm" method="GET" class="ajax-submit">
+                <div class="list-block theme-white">
+                  <ul class="width250">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-user"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Username" name="username" id="susername">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="list-block theme-white">
+                  <ul class="width250">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-envelope"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="email" placeholder="Email" name="semail" id="semail">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="list-block theme-white">
+                  <ul class="width250">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-phone"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Mobile #" name="smobile" id="smobile">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="list-block theme-white">
+                  <ul class="width250">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-hashtag"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Plate #" name="splate" id="splate" class="uppercase">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="list-block theme-white">
+                  <ul class="width250">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-lock"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="password" placeholder="Password" name="spass" id="spass">
+                          </div>
+                        </div>
+                        <div class="item-media signupshowpass eye"><i class="fa fa-eye"></i></div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="list-block">
+                  <ul class="width250">
+                    <li><input type="submit" id="btn-signup" style="width: 100%" class="item-link list-button btn-red text-center" vale="REGISTER"></li>
+                  </ul>
+                  <div class="list-block-label">
+                  </div>
+                </div>
+                <!--<div class="list-block text-center color-grey">
+                - or -
+                </div>
+                <div class="list-block">
+                  <ul class="width250">
+                     <li><a href="#" class="item-link list-button btn-charcoal text-center" data-template="loginTemplate">LOG IN</a></li>
+                  </ul>
+                </div>-->
+              </form>
+            </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</script> 
+
+<script type="text/template7" id="loginTemplate">
+    <div id="myElement" class="page" data-page="loginTemplate">
+        <div class="page-content">
+          <div class="content-block">
+            <div class="row">
+        <div class="col-100">
+          <div class="text-center">
+          <img src="img/logo-bg.png" style="width: 220px; margin: 0 auto;" />
+          </div>
+          <form id="loginForm" method="POST" class="ajax-submit">
+            <div class="list-block theme-white">
+              <ul class="width250">
+                <li class="input">
+                  <div class="item-content">
+                    <div class="item-media"><i class="fa fa-user"></i></div>
+                    <div class="item-inner">
+                      <div class="item-input">
+                        <input type="text" placeholder="Username" name="username" id="username" value="{{id}}">
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="list-block theme-white">
+              <ul class="width250">
+                <li class="input">
+                  <div class="item-content">
+                    <div class="item-media"><i class="fa fa-lock"></i></div>
+                    <div class="item-inner">
+                      <div class="item-input">
+                        <input type="password" placeholder="Password" name="password" id="pass">
+                      </div>
+                    </div>
+                    <div class="item-media loginshowpass eye"><i class="fa fa-eye"></i></div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="list-block">
+              <ul class="width250">
+                <li><input type="submit" style="width: 100%;" id="btn-auth" class="item-link list-button btn-red text-center" value="LOG IN"></li>
+              </ul>
+            </div>
+            <div class="list-block text-center color-grey">
+            - or -
+            </div>
+            <div class="list-block">
+              <ul class="width250">
+                <li><a href="#" class="item-link list-button btn-charcoal text-center" data-template="signupTemplate">REGISTER</a></li>
+              </ul>
+              <div class="list-block-label">
+              </div>
+            </div>
+          </form>
+        </div>
+        </div>
+          </div>
+        </div>
+    </div>
+</script> 
+
+<script type="text/template7" id="homeTemplate">
+    <!-- Dynamic navbar for iOS theme -->
+    {{#if @global.ios}}
+    <div class="navbar">
+        <!-- Profile Navbar -->
+        <div class="navbar-inner" data-paged="home">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white"><img src="img/icon.png" width="35"> Huli Alert</div>
+        </div>
+    </div>
+    {{/if}}
+    <div class="page" data-page="homeTemplate">
+        <!-- Fixed navbar for Material theme -->
+        {{#if @global.material}}
+        <div class="navbar">
+        <!-- Home Navbar -->
+        <div class="navbar-inner" data-paged="home">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white"><img src="img/icon.png" width="35" style="float: left; margin-top:10px;"> Huli Alert</div>
+        <div class="right"></div>
+        </div>
+        </div>
+        {{/if}}
+        <div class="page-content">
+          <div class="content-block">
+                <div class="swiper-container">
+                  <div class="swiper-wrapper">
+                  {{#each plates}}
+                    <div class="swiper-slide">
+                        <div class="col-100 text-center">
+                        <img src="img/logo-bg.png">
+                        </div>
+                        <div class="col-100 text-center">
+                          <p class="hulitext text-red uppercase">{{number}}</p>          
+                          <span class="hulitext text-green">WALA...</span><span class="hulitext text-charcoal">Parang yung panukli ng taxi driver mo.</span>
+                        </div>
+                    </div>
+                  {{/each}}
+                  </div>
+                </div>
+          </div>
+        </div>
+    </div>
+</script>  
+
+
+<script type="text/template7" id="profileTemplate">
+    <!-- Dynamic navbar for iOS theme -->
+    {{#if @global.ios}}
+    <div class="navbar">
+        <!-- Profile Navbar -->
+        <div class="navbar-inner" data-paged="profile">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Profile</div>
+        </div>
+    </div>
+    {{/if}}
+    <div class="page" data-page="profileTemplate">
+        <!-- Fixed navbar for Material theme -->
+        {{#if @global.material}}
+        <div class="navbar">
+        <!-- Home Navbar -->
+        <div class="navbar-inner" data-paged="profile">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Profile</div>
+        </div>
+        </div>
+        {{/if}}
+        <div class="page-content">
+          <div class="content-block">
+
+            <form id="profileForm" method="GET" class="ajax-submit">
+                <div class="list-block theme-white">
+                  <ul class="">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-user"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Your Name" name="acctname" id="acctname" value="{{name}}">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="list-block theme-white">
+                  <ul class="">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-envelope"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="email" placeholder="Email" name="acctemail" id="acctemail" value="{{email}}">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="list-block theme-white">
+                  <ul class="">
+                    <li class="input">
+                      <div class="item-content">
+                        <div class="item-media"><i class="fa fa-phone"></i></div>
+                        <div class="item-inner">
+                          <div class="item-input">
+                            <input type="text" placeholder="Mobile #" name="acctmobile" id="acctmobile" value="{{contact}}">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="list-block">
+                  <ul class="">
+                    <li><input type="submit" style="width: 100%" class="item-link list-button btn-red text-center" id="saveprofile" value="Save Changes"></li>
+                  </ul>
+                </div>
+
+                <div class="list-block">
+                  <ul class="">
+                    <li><a href="#" class="item-link list-button btn-charcoal text-center" id="changepass">Change password</a></li>
+                  </ul>
+                </div>
+            </form>
+
+          </div>
+        </div>
+
+    </div>
+</script>  
+
+<script type="text/template7" id="plateTemplate">
+    <!-- Dynamic navbar for iOS theme -->
+    {{#if @global.ios}}
+    <div class="navbar">
+        <!-- Profile Navbar -->
+        <div class="navbar-inner" data-paged="plate">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Plate Numbers</div>
+        </div>
+    </div>
+    {{/if}}
+    <div class="page" data-page="plateTemplate">
+        <!-- Fixed navbar for Material theme -->
+        {{#if @global.material}}
+        <div class="navbar">
+        <!-- Home Navbar -->
+        <div class="navbar-inner" data-paged="plate">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Plate Numbers</div>
+        </div>
+        </div>
+        {{/if}}
+        <div class="page-content">
+          <div class="content-block">
+                
+                <div class="list-block">
+                  <ul>
+                    {{#each plates}}
+                    <li class="swipeout">
+                      <div class="swipeout-content item-content">
+                        <div class="item-inner"><span class="plate-num uppercase">{{number}}</span></div>
+                        <div class="item-media"><span class="plate-back uppercase"><i class="fa fa-angle-left swipe-icon"></i></span></div>
+                      </div>
+                      <div class="swipeout-actions-right">
+                        <a href="#" class="bg-gray show-plate" data-id="{{id}}" data-name="{{number}}"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="bg-red delete-plate" data-id="{{id}}" data-name="{{number}}"><i class="fa fa-remove"></i></a>
+                      </div>
+                    </li>
+                    {{/each}}
+                  </ul>
+                </div>
+
+          </div>
+        </div>
+    </div>
+</script>  
+
+<script type="text/template7" id="singleplateTemplate">
+    <!-- Dynamic navbar for iOS theme -->
+    {{#if @global.ios}}
+    <div class="navbar">
+        <!-- Profile Navbar -->
+        <div class="navbar-inner" data-paged="singleplate">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">{{platenumber}}</div>
+        </div>
+    </div>
+    {{/if}}
+    <div class="page" data-page="singleplateTemplate">
+        <!-- Fixed navbar for Material theme -->
+        {{#if @global.material}}
+        <div class="navbar">
+        <div class="navbar-inner" data-paged="singleplate">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">{{platenumber}}</div>
+        </div>
+        </div>
+        {{/if}}
+        <div class="page-content">
+          <div class="content-block">
+              <div class="col-100 text-center">
+                <img src="img/logo-bg.png">
+              </div>
+
+              <div class="col-100 text-center">
+                <span class="hulitext text-green">WALA...</span>          
+                <span class="hulitext text-charcoal">Parang yung panukli ng taxi driver mo.</span>
+              </div>
+          </div>
+        </div>
+    </div>
+</script>  
+
+
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/MSOpenTech/winstore-jscompat.js"></script>
+<script type="text/javascript" src="js/framework7/js/framework7.min.js"></script>
+<script type="text/javascript" src="js/init-styles.js"></script>
+<script type="text/javascript" src="js/hulinga.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.alfafusion.hulinga" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>HuliAlert</name>
+    <description>
+        HuliAlert App
+    </description>
+    <author email="kenneth.froyalde23@gmail.com" href="http://alfafusion.com">
+        Alfafusion Team
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <icon src="icon.png" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="StatusBarStyle" value="default" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="SplashScreenBackgroundColor" value="#eaeaea" />
+    <preference name="phonegap-version" value="cli-6.1.0" />
+</widget>
