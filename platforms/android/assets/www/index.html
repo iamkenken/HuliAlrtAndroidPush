@@ -12,7 +12,7 @@
     -->
   <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
   <!-- Local -->
-  <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://hulinga.dev 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">-->
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://hulinga.dev 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:"> -->
   
   <!-- Dev -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://dev.alfafusion.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
@@ -227,6 +227,8 @@
         <div class="col-100">
           <div class="text-center">
           <img src="img/logo-bg.png" style="width: 220px; margin: 0 auto;" />
+          <br />
+          <p>{{id}}</p>
           </div>
           <form id="loginForm" method="POST" class="ajax-submit">
             <div class="list-block theme-white">

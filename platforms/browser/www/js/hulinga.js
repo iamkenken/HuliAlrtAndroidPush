@@ -508,3 +508,5 @@ $$(document).on('pageInit', function (e) {
   pagination:'.swiper-pagination'
   });
 });
+
+console.log(navigator.onLine);

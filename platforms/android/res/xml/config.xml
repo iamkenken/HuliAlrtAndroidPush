@@ -52,6 +52,6 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="StatusBarStyle" value="default" />
     <preference name="SplashScreenDelay" value="3000" />
-    <preference name="SplashScreenBackgroundColor" value="#eaeaea" />
+    <preference name="SplashScreenBackgroundColor" value="#FFFFFF" />
     <preference name="phonegap-version" value="cli-6.1.0" />
 </widget>
