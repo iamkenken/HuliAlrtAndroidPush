@@ -91,44 +91,45 @@ var api_url = 'http://dev.alfafusion.com/hulinga/public/api/v1';
 $$(document).on('deviceready', function deviceIsReady() {
   document.body.style.display = "block";
 
-  var push = PushNotification.init({
-      "android": {
-          "senderID": "306256784230"
-      },
-      "ios": {
-          "sound": true,
-          "vibration": true,
-          "badge": true
-      },
-      "windows": {}
-  });
+  console.log('calling push init');
+    var push = PushNotification.init({
+        "android": {
+            "senderID": "306256784230"
+        },
+        "ios": {
+            "sound": true,
+            "vibration": true,
+            "badge": true
+        },
+        "windows": {}
+    });
+    console.log('after init');
 
-  push.on('registration', function(data) {
-      console.log('registration event: ' + data.registrationId);
+    push.on('registration', function(data) {
+        console.log('registration event: ' + data.registrationId);
 
-      var oldRegId = localStorage.getItem('registrationId');
-      if (oldRegId !== data.registrationId) {
-          // Save new registration ID
-          localStorage.setItem('registrationId', data.registrationId);
-          // Post registrationId to your app server as the value has changed
-      }
+        var oldRegId = localStorage.getItem('registrationId');
+        if (oldRegId !== data.registrationId) {
+            // Save new registration ID
+            localStorage.setItem('registrationId', data.registrationId);
+            // Post registrationId to your app server as the value has changed
+        }
 
-  });
+    });
 
-  push.on('error', function(e) {
-      console.log("push error = " + e.message);
-  });
+    push.on('error', function(e) {
+        console.log("push error = " + e.message);
+    });
 
-  push.on('notification', function(data) {
-      console.log('notification event');
-      navigator.notification.alert(
-          data.message,         // message
-          null,                 // callback
-          data.title,           // title
-          'Ok'                  // buttonName
-      );
-  });
-
+    push.on('notification', function(data) {
+        console.log('notification event');
+        navigator.notification.alert(
+            data.message,         // message
+            null,                 // callback
+            data.title,           // title
+            'Ok'                  // buttonName
+        );
+   });
 });
 
 if(localStorage.auth == undefined)
