@@ -45,4 +45,5 @@
     <preference name="phonegap-version" value="cli-6.1.0" />
     <plugin name="phonegap-plugin-push" source="npm" spec="~1.6.4">
     <param name="SENDER_ID" value="306256784230" />
+    </plugin>
 </widget>
