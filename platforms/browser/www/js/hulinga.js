@@ -132,7 +132,7 @@ $$(document).on('deviceready', function deviceIsReady() {
    });
 });
 
-if(localStorage.auth == undefined)
+/*if(localStorage.auth == undefined)
 {
   mainView.router.load({
     template: myApp.templates.loginTemplate,
@@ -150,7 +150,7 @@ if(localStorage.auth == undefined)
 else
 {
   showhome();
-}
+}*/
 
 if(localStorage.photo == undefined)
 {
