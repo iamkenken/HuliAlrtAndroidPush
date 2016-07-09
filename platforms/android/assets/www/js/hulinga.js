@@ -84,10 +84,10 @@ var mySwiper = myApp.swiper('.swiper-container', {
 // Handle Cordova Device Ready Event
 
 /*Local*/
-var api_url = 'http://hulinga.dev/api/v1';
+/*var api_url = 'http://hulinga.dev/api/v1';*/
 
 /*Dev*/
-/*var api_url = 'http://dev.alfafusion.com/hulinga/public/api/v1';*/
+var api_url = 'http://dev.alfafusion.com/hulinga/public/api/v1';
 
 $$(document).on('deviceready', function deviceIsReady() {
   document.body.style.display = "block";
