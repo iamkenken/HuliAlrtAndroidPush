@@ -88,99 +88,94 @@ var mySwiper = myApp.swiper('.swiper-container', {
 
 /*Dev*/
 var api_url = 'http://dev.alfafusion.com/hulinga/public/api/v1';
-
-$$(document).on('deviceready', function deviceIsReady() {
-
-document.body.style.display = "block";
-
-var push = PushNotification.init({
-    "android": {
-        "senderID": "306256784230"
-    },
-    "ios": {
-        "sound": true,
-        "vibration": true,
-        "badge": true
-    },
-    "windows": {}
-});
-
-push.on('registration', function(data) {
-
-    var oldRegId = localStorage.getItem('registrationId');
-    if (oldRegId !== data.registrationId) {
-        // Save new registration ID
-        localStorage.setItem('registrationId', data.registrationId);
-        // Post registrationId to your app server as the value has changed
-    }
-
-});
-
-push.on('error', function(e) {
-    console.log("push error = " + e.message);
-});
 var isPush = false;
-push.on('notification', function(data) {
-    console.log('notification event');
-    /*navigator.notification.alert(
-        data.message,         // message
-        gotopage(data),                 // callback
-        data.title,           // title
-        'Ok'                  // buttonName
-    );*/
-    isPush = true;
-    gotopage(data);
-});
+$$(document).on('deviceready', function deviceIsReady() {
+  document.body.style.display = "block";
+    var push = PushNotification.init({
+        "android": {
+            "senderID": "306256784230"
+        },
+        "ios": {
+            "sound": true,
+            "vibration": true,
+            "badge": true
+        },
+        "windows": {}
+    });
+    console.log('after init');
 
-document.addEventListener("backbutton", function (e) {
-    if(confirm("Are you sure you want to close?")){
-      navigator.app.exitApp();
-    }
-}, false );
+    push.on('registration', function(data) {
 
-function gotopage(data){
-  if(data.additionalData.type == 'announcement'){
-    $$('.anntitle').text(data.title);
-    $$('.anncontent').text(data.content);
+        var oldRegId = localStorage.getItem('registrationId');
+        if (oldRegId !== data.registrationId) {
+            // Save new registration ID
+            localStorage.setItem('registrationId', data.registrationId);
+            // Post registrationId to your app server as the value has changed
+        }
 
-    if(annTitle != ''){
-      myApp.popup('.popup-singleannounce');
+    });
+
+    push.on('error', function(e) {
+        console.log("push error = " + e.message);
+    });
+
+    push.on('notification', function(data) {
+        console.log('notification event');
+        /*navigator.notification.alert(
+            data.message,         // message
+            gotopage(data),                 // callback
+            data.title,           // title
+            'Ok'                  // buttonName
+        );*/
+        isPush = true;
+        gotopage(data);
+   });
+
+  document.addEventListener("backbutton", function (e) {
+      if(confirm("Are you sure you want to close?")){
+        navigator.app.exitApp();
+      }
+  }, false );
+
+  function gotopage(data){
+    if(data.additionalData.type == 'announcement'){
+      $$('.anntitle').text(data.title);
+      $$('.anncontent').text(data.content);
+
+      if(annTitle != ''){
+        myApp.popup('.popup-singleannounce');
+      }
     }
   }
-}
-
+  
 if(isPush == false){
-  initialPage();
-}
-
-function initialPage(){
-if(navigator.onLine){
-  if(localStorage.auth == undefined)
-  {
-    mainView.router.load({
-      template: myApp.templates.loginTemplate,
-      animatePages: true,
-      context: {
-        id: localStorage.registrationId
-      },
-      reload: true,
-    });
+  if(navigator.onLine){
+    if(localStorage.auth == undefined)
+    {
+      mainView.router.load({
+        template: myApp.templates.loginTemplate,
+        animatePages: true,
+        context: {
+          id: localStorage.registrationId
+        },
+        reload: true,
+      });
+      $$('.navbar').css('display','none');
+      $$('.toolbar').css('display','none');
+      $$('.floating-button').css('display','none');
+      localStorage.currentPage = 'loginpage';
+    }
+    else
+    {
+      showhome();
+    }
+  }else{
     $$('.navbar').css('display','none');
     $$('.toolbar').css('display','none');
     $$('.floating-button').css('display','none');
-    localStorage.currentPage = 'loginpage';
+    $$('.error-box').html('<p style="font-size: 16px;" class="error-message"></p><p style="font-size: 30px;"><i class="fa fa-refresh reload"></i></p>')
+    myApp.hideIndicator();
   }
-  else
-  {
-    showhome();
-  }
-}else{
-  $$('.navbar').css('display','none');
-  $$('.toolbar').css('display','none');
-  $$('.floating-button').css('display','none');
-  $$('.error-box').html('<p style="font-size: 16px;" class="error-message"></p><p style="font-size: 30px;"><i class="fa fa-refresh reload"></i></p>')
-  myApp.hideIndicator();
-}
 }
 
 $$(document).on('click', '.reload', function(){
