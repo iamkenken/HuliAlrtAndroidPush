@@ -51,6 +51,7 @@ if (!isIos) {
   $$('.view.navbar-through').removeClass('navbar-through').addClass('navbar-fixed');
   // And move Navbar into Page
   $$('.view .navbar').prependTo('.view .page');
+  $$('.toolbar').remove();
 }
 
 // Initialize app
@@ -59,9 +60,9 @@ var myApp = new Framework7({
   template7Pages: true,
   precompileTemplates: true,
   animatePages: true,
-  swipePanel: 'left',
+  //swipePanel: 'left',
   swipePanelActiveArea: '30',
-  swipeBackPage: true,
+  //swipeBackPage: true,
   animateNavBackIcon: true,
   pushState: !!Framework7.prototype.device.os,
   uniqueHistory: true,
@@ -83,10 +84,10 @@ var mySwiper = myApp.swiper('.swiper-container', {
 // Handle Cordova Device Ready Event
 
 /*Local*/
-/*var api_url = 'http://hulinga.dev/api/v1';*/
+var api_url = 'http://hulinga.dev/api/v1';
 
 /*Dev*/
-var api_url = 'http://dev.alfafusion.com/hulinga/public/api/v1';
+/*var api_url = 'http://dev.alfafusion.com/hulinga/public/api/v1';*/
 
 $$(document).on('deviceready', function deviceIsReady() {
   document.body.style.display = "block";
@@ -123,34 +124,68 @@ $$(document).on('deviceready', function deviceIsReady() {
 
     push.on('notification', function(data) {
         console.log('notification event');
-        navigator.notification.alert(
+        /*navigator.notification.alert(
             data.message,         // message
             null,                 // callback
             data.title,           // title
             'Ok'                  // buttonName
-        );
+        );*/
+
+        gotopage(data);
    });
+
+  document.addEventListener("backbutton", function (e) {
+      if(confirm("Are you sure you want to close?")){
+        navigator.app.exitApp();
+      }
+  }, false );
+
+  function gotopage(data){
+    if(data.type == 'announcement'){
+      $$('.anntitle').text(data.title);
+      $$('.anncontent').text(data.content);
+
+      if(annTitle != ''){
+        myApp.popup('.popup-singleannounce');
+      }
+    }
+  }
+
 });
 
-if(localStorage.auth == undefined)
-{
-  mainView.router.load({
-    template: myApp.templates.loginTemplate,
-    animatePages: true,
-    context: {
-      id: localStorage.registrationId
-    },
-    reload: true,
-  });
+
+if(navigator.onLine){
+  if(localStorage.auth == undefined)
+  {
+    mainView.router.load({
+      template: myApp.templates.loginTemplate,
+      animatePages: true,
+      context: {
+        id: localStorage.registrationId
+      },
+      reload: true,
+    });
+    myApp.allowPanelOpen = false;
+    $$('.navbar').css('display','none');
+    $$('.toolbar').css('display','none');
+    $$('.floating-button').css('display','none');
+    localStorage.currentPage = 'loginpage';
+  }
+  else
+  {
+    showhome();
+  }
+}else{
   myApp.allowPanelOpen = false;
   $$('.navbar').css('display','none');
   $$('.toolbar').css('display','none');
-  localStorage.currentPage = 'loginpage';
+  $$('.floating-button').css('display','none');
 }
-else
-{
-  showhome();
-}
+
+$$(document).on('click', '.reload', function(){
+  location.reload();
+
+});
 
 if(localStorage.photo == undefined)
 {
@@ -254,14 +289,15 @@ $$('#logout').click(function(){
   localStorage.clear();
   $$('.navbar').css('display','none');
   $$('.toolbar').css('display','none');
+  $$('.floating-button').css('display','none');
   mainView.router.load({
     template: myApp.templates.loginTemplate,
     animatePages: true,
+    swipePanel: null,
     context: {
     },
     reload: true,
   });
-  myApp.allowPanelOpen = false;
 });
 
 $$('#a-home').click(function(){
@@ -340,7 +376,7 @@ if(acctname == localStorage.fname && acctemail == localStorage.email && acctmobi
       var datas = JSON.parse(data);
       console.log(datas);
       if(datas['status'] == 'OK'){
-        console.log(datas['data'])
+        //console.log(datas['data'])
         localStorage.fname = datas['data']['profile']['firstname'];
         localStorage.email = datas['data']['email'];
         localStorage.contact = datas['data']['profile']['contact'];
@@ -419,7 +455,7 @@ function getplates(){
   myApp.showIndicator();
   $$.get(api_url+'/getplate', {uid: localStorage.userid}, function (data) {
       myApp.hideIndicator();
-      console.log(data);
+      //console.log(data);
       var datas = JSON.parse(data);
       if(datas['status'] == 'OK'){
         mainView.router.load({
@@ -445,7 +481,7 @@ $$(document).on('click', '.delete-plate', function(){
   myApp.confirm('Are you sure you want to delete this plate number?', platename.toUpperCase(), function () {
       myApp.showIndicator();
       $$.post(api_url+'/deleteplate', {uid: localStorage.userid, plateid: plateid}, function (data) {
-        console.log(data);
+        //console.log(data);
         myApp.hideIndicator();
         var datas = JSON.parse(data);
         if(datas['status'] == 'OK'){
@@ -480,11 +516,12 @@ function showhome(){
   myApp.showIndicator();
   $$.get(api_url+'/getplate', {uid: localStorage.userid}, function (data) {
     myApp.hideIndicator();
-    console.log(data);
+    //console.log(data);
     var datas = JSON.parse(data);
     if(datas['status'] == 'OK'){
       $$('.navbar').css('display','block');
       $$('.toolbar').css('display','block');
+      $$('.floating-button').css('display','inline-flex');
       myApp.allowPanelOpen = true;
       mainView.router.load({
         template: myApp.templates.homeTemplate,
@@ -508,6 +545,62 @@ $$(document).on('pageInit', function (e) {
   var mySwiper = myApp.swiper('.swiper-container', {
   pagination:'.swiper-pagination'
   });
+
 });
 
-console.log(navigator.onLine);
+$$(document).on('click', '#a-announce', function(){
+myApp.showIndicator();
+  $$.get(api_url+'/get-announcements', function (data) {
+    myApp.hideIndicator();
+    var datas = JSON.parse(data);
+    if(datas['status'] == 'OK'){
+      localStorage.announcements = JSON.stringify(datas);
+      //console.log(JSON.stringify(data));
+      mainView.router.load({
+        template: myApp.templates.announcementTemplate,
+        animatePages: true,
+        context: { 
+          data: datas['data']
+        },
+        reload: true,
+      });
+      localStorage.currentPage = 'announcements';
+    }else{
+      myApp.alert('Something went wrong. Try again later');
+    }
+  });
+
+});
+
+$$(document).on('click', '.item-announce', function(){
+  //var cleanjsonstring = localStorage.announcements.replace(/[\u0000-\u0019]+/g,""); 
+  //console.log(localStorage.announcements)
+  var id = $$(this).data('id');
+  var datas = JSON.parse(localStorage.announcements);
+  var annTitle = '';
+  var annContent = '';
+  $$.each(datas['data'], function(i, v){
+    if(id == v.id){
+    annTitle = v.title;
+    annContent = v.content;
+    }
+  });
+
+  $$('.anntitle').text(annTitle);
+  $$('.anncontent').text(annContent);
+
+  if(annTitle != ''){
+    myApp.popup('.popup-singleannounce');
+  }
+  /*mainView.router.load({
+    template: myApp.templates.singleAnnouncementTemplate,
+    animatePages: true,
+    context: { 
+    title: annTitle,
+    content: annContent
+    },
+    reload: true,
+  });*/
+
+});
+

@@ -85,6 +85,10 @@ li.input{
   color: #3a4142;
 }
 
+.color-red{
+  background: #E21F2C!important;
+}
+
 div[class*="col-"] {
     padding-top: 15px;
 }
@@ -286,4 +290,15 @@ margin: 0 5px -3px 0;
   top: 0;
   left: 0;
   z-index: 2;
+}
+
+.close-popup{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+}
+
+.item-title i{
+  width: 25px;
 }

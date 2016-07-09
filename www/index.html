@@ -12,10 +12,10 @@
     -->
   <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
   <!-- Local -->
-  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://hulinga.dev 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:"> -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://hulinga.dev 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
   
   <!-- Dev -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://dev.alfafusion.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
+<!--   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://dev.alfafusion.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:"> -->
 
   <!-- Required meta tags-->
   <meta charset="utf-8">
@@ -47,28 +47,35 @@
     <li class="listbrowse">
       <a href="#" id="a-home" class="browse-link item-content list-panel-all close-panel item-link">
         <div class="item-inner">
-          <div id="menu-browse" class="item-title">Huli Alert</div>
+          <div id="menu-browse" class="item-title"><i class="fa fa-home"></i> Huli Alert</div>
         </div>
       </a>
     </li>
     <li class="listsettings">
       <a href="#" class="plate-link item-content list-panel-all close-panel item-link showplate">
         <div class="item-inner">
-          <div class="item-title">Plate Number</div>
+          <div class="item-title"><i class="fa fa-hashtag"></i> Plate Number</div>
+        </div>
+      </a>
+    </li>
+    <li class="listannounce">
+      <a href="#" id="a-announce" class="announce-link item-content list-panel-all close-panel item-link">
+        <div class="item-inner">
+          <div id="menu-announce" class="item-title"><i class="fa fa-microphone"></i> Announcements</div>
         </div>
       </a>
     </li>
     <li class="listprofile">
       <a href="#" id="a-profile" class="profile-link item-content list-panel-all close-panel item-link">
         <div class="item-inner">
-          <div id="menu-profile" class="item-title">My Account</div>
+          <div id="menu-profile" class="item-title"><i class="fa fa-user"></i> My Account</div>
         </div>
       </a>
     </li>
     <li class="listlogout">
       <a href="#" id="logout" class="logout-link item-content list-panel-all close-panel item-link">
         <div class="item-inner">
-          <div class="item-title">Logout</div>
+          <div class="item-title"><i class="fa fa-power-off"></i> Logout</div>
         </div>
       </a>
     </li>
@@ -101,6 +108,12 @@
         <div class="col-100 text-center">
         <img src="img/logo-bg.png" style="width: 220px; margin: 0 auto;" />
         </div>
+
+        <div class="col-100 text-center">
+        <p style="font-size: 16px;">Unable to conneth with the server. Check your internet connection and try again.</p>
+
+        <p style="font-size: 30px;"><i class="fa fa-refresh reload"></i></p>
+        </div>
         </div>
       </div>
     </div>
@@ -108,8 +121,11 @@
 </div>
 <!-- Bottom Toolbar-->
 <div class="toolbar">
-  <div class="toolbar-inner"><a href="#" class="link" id="addplate"><i class="fa fa-plus"></i></a><a href="#" class="link" id="searchplate"><i class="fa fa-search"></i></a><a href="#" class="link showplate"><i class="fa fa-hashtag"></i></a></div>
+  <div class="toolbar-inner"><a href="#" class="link" id="addplate"><i class="fa fa-plus"></i></a><!-- <a href="#" class="link" id="searchplate"><i class="fa fa-search"></i></a> --><a href="#" class="link showplate"><i class="fa fa-hashtag"></i></a></div>
 </div>
+<a href="#" class="floating-button color-red" id="addplate">
+  <i class="icon icon-plus"></i>
+</a>
 </div>
 </div>
 
@@ -516,7 +532,97 @@
     </div>
 </script>  
 
+<script type="text/template7" id="announcementTemplate">
+    <!-- Dynamic navbar for iOS theme -->
+    {{#if @global.ios}}
+    <div class="navbar">
+        <div class="navbar-inner" data-paged="announcement">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Announcements</div>
+        </div>
+    </div>
+    {{/if}}
+    <div class="page" data-page="announcementTemplate">
+        <!-- Fixed navbar for Material theme -->
+        {{#if @global.material}}
+        <div class="navbar">
+        <div class="navbar-inner" data-paged="announcement">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Announcements</div>
+        </div>
+        </div>
+        {{/if}}
+        <div class="page-content">
+          <div class="content-block">
+              <div class="list-block media-list">
+                <ul>
+                {{#each data}}
+                  <li data-id="{{id}}" class="item-announce">
+                    <a href="#" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">{{title}}</div>
+                        </div>
+                        {{#if content.length>150}}
+                        <div class="item-text">{{content.substring(0,150)}}...</div>
+                        {{else}}
+                        <div class="item-text">{{content}}</div>
+                        {{/if}}
+                      </div>
+                    </a>
+                  </li>  
+                {{/each}}             
+                </ul>
+              </div>
+          </div>
+        </div>
+    </div>
+</script>  
 
+<script type="text/template7" id="singleAnnouncementTemplate">
+    <!-- Dynamic navbar for iOS theme -->
+    {{#if @global.ios}}
+    <div class="navbar">
+        <div class="navbar-inner" data-paged="singleannouncement">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Announcements</div>
+        </div>
+    </div>
+    {{/if}}
+    <div class="page" data-page="singleAnnouncementTemplate">
+        <!-- Fixed navbar for Material theme -->
+        {{#if @global.material}}
+        <div class="navbar">
+        <div class="navbar-inner" data-paged="singleannouncement">
+        <div class="left sliding">
+          <a href="#" class="link icon-only open-panel"> <i class="fa fa-bars color-white"></i></a>
+        </div>
+        <div class="center color-white">Announcements</div>
+        </div>
+        </div>
+        {{/if}}
+        <div class="page-content">
+          <div class="content-block">
+              <h3>{{title}}</h3>
+              <p>{{content}}</p>
+          </div>
+        </div>
+    </div>
+</script>  
+
+<div class="popup popup-singleannounce">
+<div class="content-block">
+  <h3 class="anntitle"></h3>
+  <p class="anncontent"></p>
+  <p><a href="#" class="close-popup"><i class="fa fa-remove"></i></a></p>
+</div>
+</div>
 
 <script type="text/javascript" src="cordova.js"></script>
 
