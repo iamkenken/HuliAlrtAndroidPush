@@ -90,70 +90,70 @@ var mySwiper = myApp.swiper('.swiper-container', {
 var api_url = 'http://dev.alfafusion.com/hulinga/public/api/v1';
 
 $$(document).on('deviceready', function deviceIsReady() {
-  document.body.style.display = "block";
 
-  console.log('calling push init');
-    var push = PushNotification.init({
-        "android": {
-            "senderID": "306256784230"
-        },
-        "ios": {
-            "sound": true,
-            "vibration": true,
-            "badge": true
-        },
-        "windows": {}
-    });
-    console.log('after init');
+document.body.style.display = "block";
 
-    push.on('registration', function(data) {
-        console.log('registration event: ' + data.registrationId);
+var push = PushNotification.init({
+    "android": {
+        "senderID": "306256784230"
+    },
+    "ios": {
+        "sound": true,
+        "vibration": true,
+        "badge": true
+    },
+    "windows": {}
+});
 
-        var oldRegId = localStorage.getItem('registrationId');
-        if (oldRegId !== data.registrationId) {
-            // Save new registration ID
-            localStorage.setItem('registrationId', data.registrationId);
-            // Post registrationId to your app server as the value has changed
-        }
+push.on('registration', function(data) {
 
-    });
-
-    push.on('error', function(e) {
-        console.log("push error = " + e.message);
-    });
-
-    push.on('notification', function(data) {
-        console.log('notification event');
-        /*navigator.notification.alert(
-            data.message,         // message
-            null,                 // callback
-            data.title,           // title
-            'Ok'                  // buttonName
-        );*/
-
-        gotopage(data);
-   });
-
-  document.addEventListener("backbutton", function (e) {
-      if(confirm("Are you sure you want to close?")){
-        navigator.app.exitApp();
-      }
-  }, false );
-
-  function gotopage(data){
-    if(data.type == 'announcement'){
-      $$('.anntitle').text(data.title);
-      $$('.anncontent').text(data.content);
-
-      if(annTitle != ''){
-        myApp.popup('.popup-singleannounce');
-      }
+    var oldRegId = localStorage.getItem('registrationId');
+    if (oldRegId !== data.registrationId) {
+        // Save new registration ID
+        localStorage.setItem('registrationId', data.registrationId);
+        // Post registrationId to your app server as the value has changed
     }
-  }
 
 });
 
+push.on('error', function(e) {
+    console.log("push error = " + e.message);
+});
+var isPush = false;
+push.on('notification', function(data) {
+    console.log('notification event');
+    /*navigator.notification.alert(
+        data.message,         // message
+        gotopage(data),                 // callback
+        data.title,           // title
+        'Ok'                  // buttonName
+    );*/
+    isPush = true;
+    gotopage(data);
+});
 
+document.addEventListener("backbutton", function (e) {
+    if(confirm("Are you sure you want to close?")){
+      navigator.app.exitApp();
+    }
+}, false );
+
+function gotopage(data){
+  if(data.additionalData.type == 'announcement'){
+    $$('.anntitle').text(data.title);
+    $$('.anncontent').text(data.content);
+
+    if(annTitle != ''){
+      myApp.popup('.popup-singleannounce');
+    }
+  }
+}
+
+if(isPush == false){
+  initialPage();
+}
+
+function initialPage(){
 if(navigator.onLine){
   if(localStorage.auth == undefined)
   {
@@ -165,7 +165,6 @@ if(navigator.onLine){
       },
       reload: true,
     });
-    myApp.allowPanelOpen = false;
     $$('.navbar').css('display','none');
     $$('.toolbar').css('display','none');
     $$('.floating-button').css('display','none');
@@ -176,15 +175,16 @@ if(navigator.onLine){
     showhome();
   }
 }else{
-  myApp.allowPanelOpen = false;
   $$('.navbar').css('display','none');
   $$('.toolbar').css('display','none');
   $$('.floating-button').css('display','none');
+  $$('.error-box').html('<p style="font-size: 16px;" class="error-message"></p><p style="font-size: 30px;"><i class="fa fa-refresh reload"></i></p>')
+  myApp.hideIndicator();
+}
 }
 
 $$(document).on('click', '.reload', function(){
   location.reload();
-
 });
 
 if(localStorage.photo == undefined)
@@ -604,3 +604,5 @@ $$(document).on('click', '.item-announce', function(){
 
 });
 
+
+});/**deviceReady**/
